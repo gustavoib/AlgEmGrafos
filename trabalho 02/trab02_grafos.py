@@ -36,8 +36,8 @@ def calcularPesoAGM():
     L = ordenarArestasPeso(entrada)
     contarArestas = 0
     pesoAGM = 0
-    rep = list(range(n+1))
-    comp = [None] * n
+    rep = list(range(n))
+    comp = list(range(n))
     for u in range(n):
         primeiro = Vertice(u, None)
         ultimo = primeiro
