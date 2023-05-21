@@ -1,5 +1,14 @@
 import sys
 
+'''with open ("arquivo_entrada.txt", "r") as arquivo:
+    entrada = arquivo.readlines()'''
+
+#chamada dos dados  
+entrada = sys.stdin.readlines()
+
+#extração do número de vértices do grafo em questão
+n = int(entrada[2].split("=")[1])
+
 class Vertice:
     def __init__(self, valor, proximo):
         self.valor = valor
@@ -11,17 +20,20 @@ class Componente:
         self.ultimo = ultimo
         self.tamanho = tamanho
 
-def ordenarArestas(Grafo):
-    if len(Grafo) <= 1:
-        return Grafo
-    else:
-        pivo = Grafo[-1]
-        menor = [x for x in Grafo[:-1] if x[2] <= pivo[2]]
-        maior = [x for x in Grafo[:-1] if x[2] > pivo[2]]
-        return ordenarArestas(menor) + [pivo] + ordenarArestas(maior)
+def ordenarArestasPeso(entrada):
+    arestas = []
+    for i in entrada[4:]:
+        entrada = i.replace("\n", "")
+        v1 = float(entrada.split(" ")[0])
+        v2 = float(entrada.split(" ")[1])
+        w = float(entrada.split(" ")[2]) # w = peso
+        arestas.append([int(v1)-1,int(v2)-1,w])
 
-def calcularPesoAGM(G,n):
-    L = ordenarArestas(G)
+    arestas_ordenadas = sorted(arestas, key=lambda x: x[2:])
+    return arestas_ordenadas
+
+def calcularPesoAGM():
+    L = ordenarArestasPeso(entrada)
     contarArestas = 0
     pesoAGM = 0
     rep = list(range(n+1))
@@ -53,16 +65,6 @@ def calcularPesoAGM(G,n):
             break
     return pesoAGM
 
-
-if __name__ == "__main__":
-    conteudo = sys.stdin.readlines()
-
-    n = int(conteudo[2].split('=')[1])
-    grafo = []
-
-    for linha in conteudo[4:]:
-        v1, v2, peso = map(float, linha.split())
-        grafo.append([int(v1) - 1, int(v2) - 1, peso])
-
-    tamanho = calcularPesoAGM(grafo, n)
-    print(f"{tamanho:.3f}")
+#impressão do peso da AGM
+peso = calcularPesoAGM()
+print(f"{peso:.3f}")
